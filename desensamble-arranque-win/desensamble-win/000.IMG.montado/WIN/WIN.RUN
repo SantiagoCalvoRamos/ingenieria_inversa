@@ -1,0 +1,1452 @@
+;estudio del programa de arranque de windows WIN.COM
+1F33:0100 EB09          JMP	010B    
+
+1F33:010B E82C07        CALL	083A    
+1F33:010E BB3C02        MOV	BX,023C 
+1F33:0111 8BE3          MOV	SP,BX   
+1F33:0113 BB4002        MOV	BX,0240 
+1F33:0116 03D8          ADD	BX,AX   
+1F33:0118 83C30F        ADD	BX,+0F  
+1F33:011B B104          MOV	CL,04   
+1F33:011D D3EB          SHR	BX,CL   
+1F33:011F B44A          MOV	AH,4A   
+1F33:0121 CD21          INT	21      
+1F33:0123 8CC8          MOV	AX,CS   
+1F33:0125 8ED8          MOV	DS,AX   
+1F33:0127 8EC0          MOV	ES,AX   
+1F33:0129 BB6501        MOV	BX,0165 
+1F33:012C BA7301        MOV	DX,0173 
+1F33:012F B8004B        MOV	AX,4B00 
+1F33:0132 CD21          INT	21      
+1F33:0134 A10901        MOV	AX,[0109]                          
+1F33:0137 2E            CS:	        
+1F33:0138 A28000        MOV	[0080],AL                          
+1F33:013B 8BF8          MOV	DI,AX   
+1F33:013D 81C78100      ADD	DI,0081 
+1F33:0141 2E            CS:	        
+1F33:0142 C6050D        MOV	BYTE PTR [DI],0D                   
+1F33:0145 B44D          MOV	AH,4D   
+1F33:0147 CD21          INT	21      
+1F33:0149 3C42          CMP	AL,42   
+1F33:014B 74D6          JZ	0123    
+1F33:014D 3C00          CMP	AL,00   
+1F33:014F 750A          JNZ	015B    
+1F33:0151 A16301        MOV	AX,[0163]                          
+1F33:0154 8ED8          MOV	DS,AX   
+1F33:0156 2E            CS:	        
+1F33:0157 FF1E6101      CALL	FAR [0161]                         
+1F33:015B B8004C        MOV	AX,4C00 
+1F33:015E CD21          INT	21      
+1F33:0160 CB            RETF	        
+1F33:0161 0000          ADD	[BX+SI],AL                         
+1F33:0163 0000          ADD	[BX+SI],AL                         
+1F33:0165 0000          ADD	[BX+SI],AL                         
+1F33:0167 0000          ADD	[BX+SI],AL                         
+1F33:0169 0000          ADD	[BX+SI],AL                         
+;PROCEDIMIENTO
+1F33:083A E81B06        CALL	0E58    
+1F33:083D 7303          JNB	0842    
+1F33:083F E91101        JMP	0953    
+1F33:0842 E85102        CALL	0A96    
+1F33:0845 7303          JNB	084A    
+1F33:0847 E90901        JMP	0953    
+1F33:084A E8B905        CALL	0E06    
+1F33:084D FC            CLD	        
+1F33:084E 33C9          XOR	CX,CX   
+1F33:0850 33C0          XOR	AX,AX   
+1F33:0852 BE8000        MOV	SI,0080 
+1F33:0855 AC            LODSB	        
+1F33:0856 8AC8          MOV	CL,AL   
+1F33:0858 80F900        CMP	CL,00   
+1F33:085B 7503          JNZ	0860    
+1F33:085D E9A300        JMP	0903    
+1F33:0860 AC            LODSB	        
+1F33:0861 49            DEC	CX      
+1F33:0862 7503          JNZ	0867    
+1F33:0864 E99C00        JMP	0903    
+1F33:0867 3C20          CMP	AL,20   
+1F33:0869 74F5          JZ	0860    
+1F33:086B 3C09          CMP	AL,09   
+1F33:086D 74F1          JZ	0860    
+1F33:086F 3C2D          CMP	AL,2D   
+1F33:0871 7407          JZ	087A    
+1F33:0873 3C2F          CMP	AL,2F   
+1F33:0875 7403          JZ	087A    
+1F33:0877 E98900        JMP	0903    
+1F33:087A AC            LODSB	        
+1F33:087B 0C20          OR	AL,20   
+1F33:087D 3C6E          CMP	AL,6E   
+1F33:087F 742D          JZ	08AE    
+1F33:0881 3C6C          CMP	AL,6C   
+1F33:0883 750F          JNZ	0894    
+1F33:0885 C744FE2020    MOV	WORD PTR [SI-02],2020              
+1F33:088A E8B604        CALL	0D43    
+1F33:088D 36            SS:	        
+1F33:088E 891E0501      MOV	[0105],BX                          
+1F33:0892 EBCC          JMP	0860    
+1F33:0894 3C65          CMP	AL,65   
+1F33:0896 7523          JNZ	08BB    
+1F33:0898 C744FE2020    MOV	WORD PTR [SI-02],2020              
+1F33:089D E8A304        CALL	0D43    
+1F33:08A0 0BDB          OR	BX,BX   
+1F33:08A2 7503          JNZ	08A7    
+1F33:08A4 BBF000        MOV	BX,00F0 
+1F33:08A7 36            SS:	        
+1F33:08A8 891E0701      MOV	[0107],BX                          
+1F33:08AC EBB2          JMP	0860    
+1F33:08AE 36            SS:	        
+1F33:08AF 800E040102    OR	BYTE PTR [0104],02                 
+1F33:08B4 C744FE2020    MOV	WORD PTR [SI-02],2020              
+1F33:08B9 EBA5          JMP	0860    
+1F33:08BB 3C72          CMP	AL,72   
+1F33:08BD 750D          JNZ	08CC    
+1F33:08BF 36            SS:	        
+1F33:08C0 C6063208FF    MOV	BYTE PTR [0832],FF                 
+1F33:08C5 C744FE2020    MOV	WORD PTR [SI-02],2020              
+1F33:08CA EB94          JMP	0860    
+1F33:08CC 3C73          CMP	AL,73   
+1F33:08CE 750D          JNZ	08DD    
+1F33:08D0 36            SS:	        
+1F33:08D1 C6063308FF    MOV	BYTE PTR [0833],FF                 
+1F33:08D6 C744FE2020    MOV	WORD PTR [SI-02],2020              
+1F33:08DB EB83          JMP	0860    
+1F33:08DD 4E            DEC	SI      
+1F33:08DE AC            LODSB	        
+1F33:08DF 3C32          CMP	AL,32   
+1F33:08E1 750E          JNZ	08F1    
+1F33:08E3 36            SS:	        
+1F33:08E4 C6063308FF    MOV	BYTE PTR [0833],FF                 
+1F33:08E9 C744FE2020    MOV	WORD PTR [SI-02],2020              
+1F33:08EE E96FFF        JMP	0860    
+1F33:08F1 3C33          CMP	AL,33   
+1F33:08F3 750E          JNZ	0903    
+1F33:08F5 36            SS:	        
+1F33:08F6 C6063408FF    MOV	BYTE PTR [0834],FF                 
+1F33:08FB C744FE2020    MOV	WORD PTR [SI-02],2020              
+1F33:0900 E95DFF        JMP	0860    
+1F33:0903 36            SS:	        
+1F33:0904 803E3208FF    CMP	BYTE PTR [0832],FF                 
+1F33:0909 7453          JZ	095E    
+1F33:090B 36            SS:	        
+1F33:090C 803E3708FF    CMP	BYTE PTR [0837],FF                 
+1F33:0911 7502          JNZ	0915    
+1F33:0913 EB21          JMP	0936    
+1F33:0915 36            SS:	        
+1F33:0916 803E3508FF    CMP	BYTE PTR [0835],FF                 
+1F33:091B 7502          JNZ	091F    
+1F33:091D EB28          JMP	0947    
+1F33:091F 36            SS:	        
+1F33:0920 803E3308FF    CMP	BYTE PTR [0833],FF                 
+1F33:0925 7507          JNZ	092E    
+1F33:0927 E80C01        CALL	0A36    
+1F33:092A 7337          JNB	0963    
+1F33:092C EB25          JMP	0953    
+1F33:092E 36            SS:	        
+1F33:092F 803E3408FF    CMP	BYTE PTR [0834],FF                 
+1F33:0934 7507          JNZ	093D    
+1F33:0936 E81C01        CALL	0A55    
+1F33:0939 7218          JB	0953    
+1F33:093B EB26          JMP	0963    
+1F33:093D E8EA01        CALL	0B2A    
+1F33:0940 7205          JB	0947    
+1F33:0942 E81001        CALL	0A55    
+1F33:0945 731C          JNB	0963    
+1F33:0947 E89801        CALL	0AE2    
+1F33:094A 7212          JB	095E    
+1F33:094C E8E700        CALL	0A36    
+1F33:094F 7312          JNB	0963    
+1F33:0951 EB0B          JMP	095E    
+1F33:0953 8BD0          MOV	DX,AX   
+1F33:0955 B409          MOV	AH,09   
+1F33:0957 CD21          INT	21      
+1F33:0959 B8FF4C        MOV	AX,4CFF 
+1F33:095C CD21          INT	21      
+1F33:095E E81301        CALL	0A74    
+1F33:0961 72F0          JB	0953    
+1F33:0963 BE8100        MOV	SI,0081 
+1F33:0966 AC            LODSB	        
+1F33:0967 3C20          CMP	AL,20   
+1F33:0969 74FB          JZ	0966    
+1F33:096B 3C09          CMP	AL,09   
+1F33:096D 74F7          JZ	0966    
+1F33:096F 3C0D          CMP	AL,0D   
+1F33:0971 7406          JZ	0979    
+1F33:0973 36            SS:	        
+1F33:0974 C606380800    MOV	BYTE PTR [0838],00                 
+1F33:0979 81FBCC02      CMP	BX,02CC 
+1F33:097D 752F          JNZ	09AE    
+1F33:097F 9C            PUSHF	        
+1F33:0980 FD            STD	        
+1F33:0981 32ED          XOR	CH,CH   
+1F33:0983 8A0E8000      MOV	CL,[0080]                          
+1F33:0987 41            INC	CX      
+1F33:0988 8BF1          MOV	SI,CX   
+1F33:098A 81C68000      ADD	SI,0080 
+1F33:098E 8BFE          MOV	DI,SI   
+1F33:0990 83C708        ADD	DI,+08  
+1F33:0993 F3            REPZ	        
+1F33:0994 A4            MOVSB	        
+1F33:0995 9D            POPF	        
+1F33:0996 BEDC02        MOV	SI,02DC 
+1F33:0999 BF8100        MOV	DI,0081 
+1F33:099C B90800        MOV	CX,0008 
+1F33:099F F3            REPZ	        
+1F33:09A0 A4            MOVSB	        
+1F33:09A1 BF8000        MOV	DI,0080 
+1F33:09A4 800508        ADD	BYTE PTR [DI],08                   
+1F33:09A7 36            SS:	        
+1F33:09A8 C70609010800  MOV	WORD PTR [0109],0008               
+1F33:09AE 8CD8          MOV	AX,DS   
+1F33:09B0 36            SS:	        
+1F33:09B1 A36D01        MOV	[016D],AX                          
+1F33:09B4 36            SS:	        
+1F33:09B5 A37101        MOV	[0171],AX                          
+1F33:09B8 36            SS:	        
+1F33:09B9 A36901        MOV	[0169],AX                          
+1F33:09BC 36            SS:	        
+1F33:09BD C7066B015C00  MOV	WORD PTR [016B],005C               
+1F33:09C3 36            SS:	        
+1F33:09C4 C7066F016C00  MOV	WORD PTR [016F],006C               
+1F33:09CA 36            SS:	        
+1F33:09CB C70667018000  MOV	WORD PTR [0167],0080               
+1F33:09D1 A12C00        MOV	AX,[002C]                          
+1F33:09D4 36            SS:	        
+1F33:09D5 A36501        MOV	[0165],AX                          
+1F33:09D8 C706FE005957  MOV	WORD PTR [00FE],5759               
+1F33:09DE 36            SS:	        
+1F33:09DF 803E380800    CMP	BYTE PTR [0838],00                 
+1F33:09E4 743C          JZ	0A22    
+1F33:09E6 06            PUSH	ES      
+1F33:09E7 B84000        MOV	AX,0040 
+1F33:09EA 8EC0          MOV	ES,AX   
+1F33:09EC 26            ES:	        
+1F33:09ED A08400        MOV	AL,[0084]                          
+1F33:09F0 50            PUSH	AX      
+1F33:09F1 53            PUSH	BX      
+1F33:09F2 E81005        CALL	0F05    
+1F33:09F5 5B            POP	BX      
+1F33:09F6 5A            POP	DX      
+1F33:09F7 26            ES:	        
+1F33:09F8 88168400      MOV	[0084],DL                          
+1F33:09FC 07            POP	ES      
+1F33:09FD 8BC8          MOV	CX,AX   
+1F33:09FF E321          JCXZ	0A22    
+1F33:0A01 BE400F        MOV	SI,0F40 
+1F33:0A04 BF4002        MOV	DI,0240 
+1F33:0A07 F3            REPZ	        
+1F33:0A08 A4            MOVSB	        
+1F33:0A09 8CCB          MOV	BX,CS   
+1F33:0A0B BA4002        MOV	DX,0240 
+1F33:0A0E B104          MOV	CL,04   
+1F33:0A10 D3EA          SHR	DX,CL   
+1F33:0A12 03DA          ADD	BX,DX   
+1F33:0A14 36            SS:	        
+1F33:0A15 C70661010700  MOV	WORD PTR [0161],0007               
+1F33:0A1B 36            SS:	        
+1F33:0A1C 891E6301      MOV	[0163],BX                          
+1F33:0A20 EB0E          JMP	0A30    
+1F33:0A22 8CCB          MOV	BX,CS   
+1F33:0A24 36            SS:	        
+1F33:0A25 C70661016001  MOV	WORD PTR [0161],0160               
+1F33:0A2B 36            SS:	        
+1F33:0A2C 891E6301      MOV	[0163],BX                          
+1F33:0A30 50            PUSH	AX      
+1F33:0A31 E86404        CALL	0E98    
+1F33:0A34 58            POP	AX      
+1F33:0A35 C3            RET	        
+;PROCEDIMIENTO
+1F33:0A36 E8A504        CALL	0EDE    
+1F33:0A39 3D8602        CMP	AX,0286 
+1F33:0A3C 7212          JB	0A50    
+1F33:0A3E E86B00        CALL	0AAC    
+1F33:0A41 7211          JB	0A54    
+1F33:0A43 BBCC02        MOV	BX,02CC 
+1F33:0A46 E85F02        CALL	0CA8    
+1F33:0A49 7309          JNB	0A54    
+1F33:0A4B B84905        MOV	AX,0549 
+1F33:0A4E EB04          JMP	0A54    
+1F33:0A50 F9            STC	        
+1F33:0A51 B8AD03        MOV	AX,03AD 
+1F33:0A54 C3            RET	        
+;PROCEDIMIENTO
+1F33:0A55 E88604        CALL	0EDE    
+1F33:0A58 3D8603        CMP	AX,0386 
+1F33:0A5B 7512          JNZ	0A6F    
+1F33:0A5D E84C00        CALL	0AAC    
+1F33:0A60 7211          JB	0A73    
+1F33:0A62 BBBA02        MOV	BX,02BA 
+1F33:0A65 E84002        CALL	0CA8    
+1F33:0A68 7309          JNB	0A73    
+1F33:0A6A B8B504        MOV	AX,04B5 
+1F33:0A6D EB04          JMP	0A73    
+1F33:0A6F F9            STC	        
+1F33:0A70 B84E03        MOV	AX,034E 
+1F33:0A73 C3            RET	        
+;PROCEDIMIENTO
+1F33:0A74 F8            CLC	        
+1F33:0A75 26            ES:	        
+1F33:0A76 A10200        MOV	AX,[0002]                          
+1F33:0A79 8CCB          MOV	BX,CS   
+1F33:0A7B 2BC3          SUB	AX,BX   
+1F33:0A7D 3DFF5D        CMP	AX,5DFF 
+1F33:0A80 720F          JB	0A91    
+1F33:0A82 BBA802        MOV	BX,02A8 
+1F33:0A85 E82002        CALL	0CA8    
+1F33:0A88 730B          JNB	0A95    
+1F33:0A8A B82E04        MOV	AX,042E 
+1F33:0A8D F9            STC	        
+1F33:0A8E EB05          JMP	0A95    
+1F33:0A90 90            NOP	        
+1F33:0A91 F9            STC	        
+1F33:0A92 B89806        MOV	AX,0698 
+1F33:0A95 C3            RET	        
+;PROCEDIMIENTO
+1F33:0A96 F8            CLC	        
+1F33:0A97 26            ES:	        
+1F33:0A98 A10200        MOV	AX,[0002]                          
+1F33:0A9B 8CCB          MOV	BX,CS   
+1F33:0A9D 2BC3          SUB	AX,BX   
+1F33:0A9F 3D0040        CMP	AX,4000 
+1F33:0AA2 7203          JB	0AA7    
+1F33:0AA4 EB05          JMP	0AAB    
+1F33:0AA6 90            NOP	        
+1F33:0AA7 F9            STC	        
+1F33:0AA8 B89806        MOV	AX,0698 
+1F33:0AAB C3            RET	        
+;PROCEDIMIENTO
+1F33:0AAC 53            PUSH	BX      
+1F33:0AAD B400          MOV	AH,00   
+1F33:0AAF E8BC03        CALL	0E6E    
+1F33:0AB2 7214          JB	0AC8    
+1F33:0AB4 0BC0          OR	AX,AX   
+1F33:0AB6 7410          JZ	0AC8    
+1F33:0AB8 80FC02        CMP	AH,02   
+1F33:0ABB 721F          JB	0ADC    
+1F33:0ABD 7706          JA	0AC5    
+1F33:0ABF 81FB2802      CMP	BX,0228 
+1F33:0AC3 7217          JB	0ADC    
+1F33:0AC5 F8            CLC	        
+1F33:0AC6 EB18          JMP	0AE0    
+1F33:0AC8 B488          MOV	AH,88   
+1F33:0ACA CD15          INT	15      
+1F33:0ACC 0BC0          OR	AX,AX   
+1F33:0ACE 7506          JNZ	0AD6    
+1F33:0AD0 B8AD03        MOV	AX,03AD 
+1F33:0AD3 F9            STC	        
+1F33:0AD4 EB0A          JMP	0AE0    
+1F33:0AD6 B82106        MOV	AX,0621 
+1F33:0AD9 F9            STC	        
+1F33:0ADA EB04          JMP	0AE0    
+1F33:0ADC B8D205        MOV	AX,05D2 
+1F33:0ADF F9            STC	        
+1F33:0AE0 5B            POP	BX      
+1F33:0AE1 C3            RET	        
+;PROCEDIMIENTO
+1F33:0AE2 F8            CLC	        
+1F33:0AE3 B401          MOV	AH,01   
+1F33:0AE5 BAFFFF        MOV	DX,FFFF 
+1F33:0AE8 E88303        CALL	0E6E    
+1F33:0AEB 723B          JB	0B28    
+1F33:0AED 0BC0          OR	AX,AX   
+1F33:0AEF 740A          JZ	0AFB    
+1F33:0AF1 B402          MOV	AH,02   
+1F33:0AF3 E87803        CALL	0E6E    
+1F33:0AF6 B94000        MOV	CX,0040 
+1F33:0AF9 EB02          JMP	0AFD    
+1F33:0AFB 33C9          XOR	CX,CX   
+1F33:0AFD B408          MOV	AH,08   
+1F33:0AFF E86C03        CALL	0E6E    
+1F33:0B02 03D1          ADD	DX,CX   
+1F33:0B04 81FAC000      CMP	DX,00C0 
+1F33:0B08 730C          JNB	0B16    
+1F33:0B0A E80A01        CALL	0C17    
+1F33:0B0D 7219          JB	0B28    
+1F33:0B0F 03C2          ADD	AX,DX   
+1F33:0B11 3DC000        CMP	AX,00C0 
+1F33:0B14 7212          JB	0B28    
+1F33:0B16 E8AB00        CALL	0BC4    
+1F33:0B19 7203          JB	0B1E    
+1F33:0B1B EB0C          JMP	0B29    
+1F33:0B1D 90            NOP	        
+1F33:0B1E E84F00        CALL	0B70    
+1F33:0B21 7205          JB	0B28    
+1F33:0B23 E8C900        CALL	0BEF    
+1F33:0B26 7301          JNB	0B29    
+1F33:0B28 F9            STC	        
+1F33:0B29 C3            RET	        
+;PROCEDIMIENTO
+1F33:0B2A F8            CLC	        
+1F33:0B2B B401          MOV	AH,01   
+1F33:0B2D BAFFFF        MOV	DX,FFFF 
+1F33:0B30 E83B03        CALL	0E6E    
+1F33:0B33 7239          JB	0B6E    
+1F33:0B35 0BC0          OR	AX,AX   
+1F33:0B37 740A          JZ	0B43    
+1F33:0B39 B402          MOV	AH,02   
+1F33:0B3B E83003        CALL	0E6E    
+1F33:0B3E B94000        MOV	CX,0040 
+1F33:0B41 EB02          JMP	0B45    
+1F33:0B43 33C9          XOR	CX,CX   
+1F33:0B45 B408          MOV	AH,08   
+1F33:0B47 E82403        CALL	0E6E    
+1F33:0B4A 7222          JB	0B6E    
+1F33:0B4C 03D1          ADD	DX,CX   
+1F33:0B4E 81FA0004      CMP	DX,0400 
+1F33:0B52 730C          JNB	0B60    
+1F33:0B54 E8C000        CALL	0C17    
+1F33:0B57 7215          JB	0B6E    
+1F33:0B59 03C2          ADD	AX,DX   
+1F33:0B5B 3D0004        CMP	AX,0400 
+1F33:0B5E 720E          JB	0B6E    
+1F33:0B60 E80F01        CALL	0C72    
+1F33:0B63 7304          JNB	0B69    
+1F33:0B65 F8            CLC	        
+1F33:0B66 EB07          JMP	0B6F    
+1F33:0B68 90            NOP	        
+1F33:0B69 E80400        CALL	0B70    
+1F33:0B6C 7301          JNB	0B6F    
+1F33:0B6E F9            STC	        
+1F33:0B6F C3            RET	        
+;PROCEDIMIENTO
+1F33:0B70 53            PUSH	BX      
+1F33:0B71 0E            PUSH	CS      
+1F33:0B72 1F            POP	DS      
+1F33:0B73 BADD07        MOV	DX,07DD 
+1F33:0B76 B8003D        MOV	AX,3D00 
+1F33:0B79 CD21          INT	21      
+1F33:0B7B 7245          JB	0BC2    
+1F33:0B7D 8BD8          MOV	BX,AX   
+1F33:0B7F B80044        MOV	AX,4400 
+1F33:0B82 CD21          INT	21      
+1F33:0B84 7236          JB	0BBC    
+1F33:0B86 F7C28000      TEST	DX,0080 
+1F33:0B8A 7430          JZ	0BBC    
+1F33:0B8C F7C20040      TEST	DX,4000 
+1F33:0B90 742A          JZ	0BBC    
+1F33:0B92 BACD07        MOV	DX,07CD 
+1F33:0B95 B90600        MOV	CX,0006 
+1F33:0B98 B80244        MOV	AX,4402 
+1F33:0B9B CD21          INT	21      
+1F33:0B9D 721D          JB	0BBC    
+1F33:0B9F 3BC1          CMP	AX,CX   
+1F33:0BA1 7519          JNZ	0BBC    
+1F33:0BA3 8BF2          MOV	SI,DX   
+1F33:0BA5 8B4404        MOV	AX,[SI+04]                         
+1F33:0BA8 86E0          XCHG	AH,AL   
+1F33:0BAA 3D0001        CMP	AX,0100 
+1F33:0BAD 720D          JB	0BBC    
+1F33:0BAF 3D0001        CMP	AX,0100 
+1F33:0BB2 7708          JA	0BBC    
+1F33:0BB4 B8003E        MOV	AX,3E00 
+1F33:0BB7 CD21          INT	21      
+1F33:0BB9 F8            CLC	        
+1F33:0BBA EB06          JMP	0BC2    
+1F33:0BBC B8003E        MOV	AX,3E00 
+1F33:0BBF CD21          INT	21      
+1F33:0BC1 F9            STC	        
+1F33:0BC2 5B            POP	BX      
+1F33:0BC3 C3            RET	        
+;PROCEDIMIENTO
+1F33:0BC4 52            PUSH	DX      
+1F33:0BC5 53            PUSH	BX      
+1F33:0BC6 E81503        CALL	0EDE    
+1F33:0BC9 3D8603        CMP	AX,0386 
+1F33:0BCC 751D          JNZ	0BEB    
+1F33:0BCE E8A100        CALL	0C72    
+1F33:0BD1 7218          JB	0BEB    
+1F33:0BD3 B443          MOV	AH,43   
+1F33:0BD5 BB0100        MOV	BX,0001 
+1F33:0BD8 CD67          INT	67      
+1F33:0BDA 0F            POP	CS      
+1F33:0BDB 01E0          ADD	AX,SP   
+1F33:0BDD 250100        AND	AX,0001 
+1F33:0BE0 9C            PUSHF	        
+1F33:0BE1 B445          MOV	AH,45   
+1F33:0BE3 CD67          INT	67      
+1F33:0BE5 9D            POPF	        
+1F33:0BE6 7403          JZ	0BEB    
+1F33:0BE8 F9            STC	        
+1F33:0BE9 EB01          JMP	0BEC    
+1F33:0BEB F8            CLC	        
+1F33:0BEC 5B            POP	BX      
+1F33:0BED 5A            POP	DX      
+1F33:0BEE C3            RET	        
+;PROCEDIMIENTO
+1F33:0BEF B80046        MOV	AX,4600 
+1F33:0BF2 CD67          INT	67      
+1F33:0BF4 80FC00        CMP	AH,00   
+1F33:0BF7 751D          JNZ	0C16    
+1F33:0BF9 8BC8          MOV	CX,AX   
+1F33:0BFB B8004B        MOV	AX,4B00 
+1F33:0BFE CD67          INT	67      
+1F33:0C00 80FC00        CMP	AH,00   
+1F33:0C03 7511          JNZ	0C16    
+1F33:0C05 80F940        CMP	CL,40   
+1F33:0C08 7205          JB	0C0F    
+1F33:0C0A 0BDB          OR	BX,BX   
+1F33:0C0C 7401          JZ	0C0F    
+1F33:0C0E 4B            DEC	BX      
+1F33:0C0F 83FB00        CMP	BX,+00  
+1F33:0C12 F9            STC	        
+1F33:0C13 7501          JNZ	0C16    
+1F33:0C15 F8            CLC	        
+1F33:0C16 C3            RET	        
+;PROCEDIMIENTO
+1F33:0C17 53            PUSH	BX      
+1F33:0C18 52            PUSH	DX      
+1F33:0C19 BAD407        MOV	DX,07D4 
+1F33:0C1C B8023D        MOV	AX,3D02 
+1F33:0C1F CD21          INT	21      
+1F33:0C21 7249          JB	0C6C    
+1F33:0C23 8BD8          MOV	BX,AX   
+1F33:0C25 B80044        MOV	AX,4400 
+1F33:0C28 CD21          INT	21      
+1F33:0C2A 723B          JB	0C67    
+1F33:0C2C F7C28000      TEST	DX,0080 
+1F33:0C30 7435          JZ	0C67    
+1F33:0C32 F7C20040      TEST	DX,4000 
+1F33:0C36 742F          JZ	0C67    
+1F33:0C38 BAA507        MOV	DX,07A5 
+1F33:0C3B B92800        MOV	CX,0028 
+1F33:0C3E B80244        MOV	AX,4402 
+1F33:0C41 CD21          INT	21      
+1F33:0C43 7222          JB	0C67    
+1F33:0C45 3BC1          CMP	AX,CX   
+1F33:0C47 751E          JNZ	0C67    
+1F33:0C49 8BF2          MOV	SI,DX   
+1F33:0C4B 8A4403        MOV	AL,[SI+03]                         
+1F33:0C4E 3C01          CMP	AL,01   
+1F33:0C50 7515          JNZ	0C67    
+1F33:0C52 8B4422        MOV	AX,[SI+22]                         
+1F33:0C55 2B4426        SUB	AX,[SI+26]                         
+1F33:0C58 760D          JBE	0C67    
+1F33:0C5A B104          MOV	CL,04   
+1F33:0C5C D3E0          SHL	AX,CL   
+1F33:0C5E 50            PUSH	AX      
+1F33:0C5F B8003E        MOV	AX,3E00 
+1F33:0C62 CD21          INT	21      
+1F33:0C64 58            POP	AX      
+1F33:0C65 EB08          JMP	0C6F    
+1F33:0C67 B8003E        MOV	AX,3E00 
+1F33:0C6A CD21          INT	21      
+1F33:0C6C 33C0          XOR	AX,AX   
+1F33:0C6E F9            STC	        
+1F33:0C6F 5A            POP	DX      
+1F33:0C70 5B            POP	BX      
+1F33:0C71 C3            RET	        
+;PROCEDIMIENTO
+1F33:0C72 53            PUSH	BX      
+1F33:0C73 52            PUSH	DX      
+1F33:0C74 BADD07        MOV	DX,07DD 
+1F33:0C77 B8003D        MOV	AX,3D00 
+1F33:0C7A CD21          INT	21      
+1F33:0C7C 7227          JB	0CA5    
+1F33:0C7E 8BD8          MOV	BX,AX   
+1F33:0C80 B80044        MOV	AX,4400 
+1F33:0C83 CD21          INT	21      
+1F33:0C85 7218          JB	0C9F    
+1F33:0C87 81E28000      AND	DX,0080 
+1F33:0C8B 7412          JZ	0C9F    
+1F33:0C8D B80744        MOV	AX,4407 
+1F33:0C90 CD21          INT	21      
+1F33:0C92 720B          JB	0C9F    
+1F33:0C94 0AC0          OR	AL,AL   
+1F33:0C96 7407          JZ	0C9F    
+1F33:0C98 B8003E        MOV	AX,3E00 
+1F33:0C9B CD21          INT	21      
+1F33:0C9D EB06          JMP	0CA5    
+1F33:0C9F B8003E        MOV	AX,3E00 
+1F33:0CA2 CD21          INT	21      
+1F33:0CA4 F9            STC	        
+1F33:0CA5 5A            POP	DX      
+1F33:0CA6 5B            POP	BX      
+1F33:0CA7 C3            RET	        
+;PROCEDIMIENTO
+1F33:0CA8 53            PUSH	BX      
+1F33:0CA9 83C307        ADD	BX,+07  
+1F33:0CAC E81F00        CALL	0CCE    
+1F33:0CAF 731B          JNB	0CCC    
+1F33:0CB1 83EB07        SUB	BX,+07  
+1F33:0CB4 E81700        CALL	0CCE    
+1F33:0CB7 7313          JNB	0CCC    
+1F33:0CB9 83C307        ADD	BX,+07  
+1F33:0CBC E84300        CALL	0D02    
+1F33:0CBF 730B          JNB	0CCC    
+1F33:0CC1 E8D200        CALL	0D96    
+1F33:0CC4 7306          JNB	0CCC    
+1F33:0CC6 83EB07        SUB	BX,+07  
+1F33:0CC9 E8CA00        CALL	0D96    
+1F33:0CCC 5B            POP	BX      
+1F33:0CCD C3            RET	        
+;PROCEDIMIENTO
+1F33:0CCE 57            PUSH	DI      
+1F33:0CCF 56            PUSH	SI      
+1F33:0CD0 1E            PUSH	DS      
+1F33:0CD1 36            SS:	        
+1F33:0CD2 A12C08        MOV	AX,[082C]                          
+1F33:0CD5 8ED8          MOV	DS,AX   
+1F33:0CD7 36            SS:	        
+1F33:0CD8 8B362A08      MOV	SI,[082A]                          
+1F33:0CDC BF7301        MOV	DI,0173 
+1F33:0CDF 8BD7          MOV	DX,DI   
+1F33:0CE1 AC            LODSB	        
+1F33:0CE2 AA            STOSB	        
+1F33:0CE3 3C5C          CMP	AL,5C   
+1F33:0CE5 7404          JZ	0CEB    
+1F33:0CE7 3C2F          CMP	AL,2F   
+1F33:0CE9 7502          JNZ	0CED    
+1F33:0CEB 8BD7          MOV	DX,DI   
+1F33:0CED 0AC0          OR	AL,AL   
+1F33:0CEF 75F0          JNZ	0CE1    
+1F33:0CF1 1F            POP	DS      
+1F33:0CF2 8BFA          MOV	DI,DX   
+1F33:0CF4 8BF3          MOV	SI,BX   
+1F33:0CF6 AC            LODSB	        
+1F33:0CF7 AA            STOSB	        
+1F33:0CF8 0AC0          OR	AL,AL   
+1F33:0CFA 75FA          JNZ	0CF6    
+1F33:0CFC E88500        CALL	0D84    
+1F33:0CFF 5E            POP	SI      
+1F33:0D00 5F            POP	DI      
+1F33:0D01 C3            RET	        
+;PROCEDIMIENTO
+1F33:0D02 57            PUSH	DI      
+1F33:0D03 56            PUSH	SI      
+1F33:0D04 B419          MOV	AH,19   
+1F33:0D06 CD21          INT	21      
+1F33:0D08 8AD0          MOV	DL,AL   
+1F33:0D0A FEC2          INC	DL      
+1F33:0D0C 0441          ADD	AL,41   
+1F33:0D0E 1E            PUSH	DS      
+1F33:0D0F 07            POP	ES      
+1F33:0D10 8D3E7301      LEA	DI,[0173]                          
+1F33:0D14 AA            STOSB	        
+1F33:0D15 B03A          MOV	AL,3A   
+1F33:0D17 AA            STOSB	        
+1F33:0D18 B05C          MOV	AL,5C   
+1F33:0D1A AA            STOSB	        
+1F33:0D1B 8D36E607      LEA	SI,[07E6]                          
+1F33:0D1F B447          MOV	AH,47   
+1F33:0D21 CD21          INT	21      
+1F33:0D23 721B          JB	0D40    
+1F33:0D25 AC            LODSB	        
+1F33:0D26 AA            STOSB	        
+1F33:0D27 0AC0          OR	AL,AL   
+1F33:0D29 75FA          JNZ	0D25    
+1F33:0D2B 4F            DEC	DI      
+1F33:0D2C 807DFF5C      CMP	BYTE PTR [DI-01],5C                
+1F33:0D30 7403          JZ	0D35    
+1F33:0D32 B05C          MOV	AL,5C   
+1F33:0D34 AA            STOSB	        
+1F33:0D35 8BF3          MOV	SI,BX   
+1F33:0D37 AC            LODSB	        
+1F33:0D38 AA            STOSB	        
+1F33:0D39 0AC0          OR	AL,AL   
+1F33:0D3B 75FA          JNZ	0D37    
+1F33:0D3D E84400        CALL	0D84    
+1F33:0D40 5E            POP	SI      
+1F33:0D41 5F            POP	DI      
+1F33:0D42 C3            RET	        
+;PROCEDIMIENTO
+1F33:0D43 52            PUSH	DX      
+1F33:0D44 33DB          XOR	BX,BX   
+1F33:0D46 32E4          XOR	AH,AH   
+1F33:0D48 49            DEC	CX      
+1F33:0D49 742C          JZ	0D77    
+1F33:0D4B AC            LODSB	        
+1F33:0D4C 3C2B          CMP	AL,2B   
+1F33:0D4E 7409          JZ	0D59    
+1F33:0D50 3C2D          CMP	AL,2D   
+1F33:0D52 750D          JNZ	0D61    
+1F33:0D54 C606390801    MOV	BYTE PTR [0839],01                 
+1F33:0D59 C644FF20      MOV	BYTE PTR [SI-01],20                
+1F33:0D5D 49            DEC	CX      
+1F33:0D5E 7417          JZ	0D77    
+1F33:0D60 AC            LODSB	        
+1F33:0D61 2C30          SUB	AL,30   
+1F33:0D63 7212          JB	0D77    
+1F33:0D65 3C39          CMP	AL,39   
+1F33:0D67 770E          JA	0D77    
+1F33:0D69 D1E3          SHL	BX,1    
+1F33:0D6B 8BD3          MOV	DX,BX   
+1F33:0D6D D1E3          SHL	BX,1    
+1F33:0D6F D1E3          SHL	BX,1    
+1F33:0D71 03DA          ADD	BX,DX   
+1F33:0D73 03D8          ADD	BX,AX   
+1F33:0D75 EBE2          JMP	0D59    
+1F33:0D77 4E            DEC	SI      
+1F33:0D78 41            INC	CX      
+1F33:0D79 803E390800    CMP	BYTE PTR [0839],00                 
+1F33:0D7E 7402          JZ	0D82    
+1F33:0D80 F7DB          NEG	BX      
+1F33:0D82 5A            POP	DX      
+1F33:0D83 C3            RET	        
+;PROCEDIMIENTO
+1F33:0D84 BA7301        MOV	DX,0173 
+1F33:0D87 B8003D        MOV	AX,3D00 
+1F33:0D8A CD21          INT	21      
+1F33:0D8C 7207          JB	0D95    
+1F33:0D8E 8BD8          MOV	BX,AX   
+1F33:0D90 B8003E        MOV	AX,3E00 
+1F33:0D93 CD21          INT	21      
+1F33:0D95 C3            RET	        
+;PROCEDIMIENTO
+1F33:0D96 1E            PUSH	DS      
+1F33:0D97 8CDA          MOV	DX,DS   
+1F33:0D99 8EC2          MOV	ES,DX   
+1F33:0D9B 8E1E2C00      MOV	DS,[002C]                          
+1F33:0D9F 33F6          XOR	SI,SI   
+1F33:0DA1 FC            CLD	        
+1F33:0DA2 BFA402        MOV	DI,02A4 
+1F33:0DA5 B90400        MOV	CX,0004 
+1F33:0DA8 F3            REPZ	        
+1F33:0DA9 A6            CMPSB	        
+1F33:0DAA 740C          JZ	0DB8    
+1F33:0DAC AC            LODSB	        
+1F33:0DAD 0AC0          OR	AL,AL   
+1F33:0DAF 75FB          JNZ	0DAC    
+1F33:0DB1 803C00        CMP	BYTE PTR [SI],00                   
+1F33:0DB4 75EC          JNZ	0DA2    
+1F33:0DB6 EB4B          JMP	0E03    
+1F33:0DB8 AC            LODSB	        
+1F33:0DB9 3C3D          CMP	AL,3D   
+1F33:0DBB 75FB          JNZ	0DB8    
+1F33:0DBD BF7301        MOV	DI,0173 
+1F33:0DC0 8BD7          MOV	DX,DI   
+1F33:0DC2 AC            LODSB	        
+1F33:0DC3 AA            STOSB	        
+1F33:0DC4 3C00          CMP	AL,00   
+1F33:0DC6 7404          JZ	0DCC    
+1F33:0DC8 3C3B          CMP	AL,3B   
+1F33:0DCA 75F6          JNZ	0DC2    
+1F33:0DCC 36            SS:	        
+1F33:0DCD 8C1E2808      MOV	[0828],DS                          
+1F33:0DD1 36            SS:	        
+1F33:0DD2 89362608      MOV	[0826],SI                          
+1F33:0DD6 4F            DEC	DI      
+1F33:0DD7 4F            DEC	DI      
+1F33:0DD8 26            ES:	        
+1F33:0DD9 803D5C        CMP	BYTE PTR [DI],5C                   
+1F33:0DDC 7405          JZ	0DE3    
+1F33:0DDE 47            INC	DI      
+1F33:0DDF 26            ES:	        
+1F33:0DE0 C6055C        MOV	BYTE PTR [DI],5C                   
+1F33:0DE3 47            INC	DI      
+1F33:0DE4 06            PUSH	ES      
+1F33:0DE5 1F            POP	DS      
+1F33:0DE6 8BF3          MOV	SI,BX   
+1F33:0DE8 AC            LODSB	        
+1F33:0DE9 AA            STOSB	        
+1F33:0DEA 0AC0          OR	AL,AL   
+1F33:0DEC 75FA          JNZ	0DE8    
+1F33:0DEE E893FF        CALL	0D84    
+1F33:0DF1 7311          JNB	0E04    
+1F33:0DF3 36            SS:	        
+1F33:0DF4 8B362608      MOV	SI,[0826]                          
+1F33:0DF8 36            SS:	        
+1F33:0DF9 8E1E2808      MOV	DS,[0828]                          
+1F33:0DFD 807CFF00      CMP	BYTE PTR [SI-01],00                
+1F33:0E01 75BA          JNZ	0DBD    
+1F33:0E03 F9            STC	        
+1F33:0E04 1F            POP	DS      
+1F33:0E05 C3            RET	        
+;PROCEDIMIENTO
+1F33:0E06 1E            PUSH	DS      
+1F33:0E07 8E1E2C00      MOV	DS,[002C]                          
+1F33:0E0B 33F6          XOR	SI,SI   
+1F33:0E0D AC            LODSB	        
+1F33:0E0E 0AC0          OR	AL,AL   
+1F33:0E10 75FB          JNZ	0E0D    
+1F33:0E12 AC            LODSB	        
+1F33:0E13 0AC0          OR	AL,AL   
+1F33:0E15 75F6          JNZ	0E0D    
+1F33:0E17 46            INC	SI      
+1F33:0E18 46            INC	SI      
+1F33:0E19 36            SS:	        
+1F33:0E1A 89362A08      MOV	[082A],SI                          
+1F33:0E1E 36            SS:	        
+1F33:0E1F 8C1E2C08      MOV	[082C],DS                          
+1F33:0E23 AC            LODSB	        
+1F33:0E24 3C5C          CMP	AL,5C   
+1F33:0E26 7404          JZ	0E2C    
+1F33:0E28 3C2F          CMP	AL,2F   
+1F33:0E2A 7502          JNZ	0E2E    
+1F33:0E2C 8BD6          MOV	DX,SI   
+1F33:0E2E 0AC0          OR	AL,AL   
+1F33:0E30 75F1          JNZ	0E23    
+1F33:0E32 8BF2          MOV	SI,DX   
+1F33:0E34 807C0333      CMP	BYTE PTR [SI+03],33                
+1F33:0E38 740E          JZ	0E48    
+1F33:0E3A 807C0332      CMP	BYTE PTR [SI+03],32                
+1F33:0E3E 7410          JZ	0E50    
+1F33:0E40 36            SS:	        
+1F33:0E41 C6063608FF    MOV	BYTE PTR [0836],FF                 
+1F33:0E46 EB0E          JMP	0E56    
+1F33:0E48 36            SS:	        
+1F33:0E49 C6063708FF    MOV	BYTE PTR [0837],FF                 
+1F33:0E4E EB06          JMP	0E56    
+1F33:0E50 36            SS:	        
+1F33:0E51 C6063508FF    MOV	BYTE PTR [0835],FF                 
+1F33:0E56 1F            POP	DS      
+1F33:0E57 C3            RET	        
+;PROCEDIMIENTO
+1F33:0E58 F8            CLC	        
+1F33:0E59 B80030        MOV	AX,3000 
+1F33:0E5C CD21          INT	21      
+1F33:0E5E 3C03          CMP	AL,03   
+1F33:0E60 7207          JB	0E69    
+1F33:0E62 7709          JA	0E6D    
+1F33:0E64 80FC0A        CMP	AH,0A   
+1F33:0E67 7304          JNB	0E6D    
+1F33:0E69 F9            STC	        
+1F33:0E6A B86C06        MOV	AX,066C 
+1F33:0E6D C3            RET	        
+;PROCEDIMIENTO
+1F33:0E6E 51            PUSH	CX      
+1F33:0E6F 06            PUSH	ES      
+1F33:0E70 33D2          XOR	DX,DX   
+1F33:0E72 8BC8          MOV	CX,AX   
+1F33:0E74 B80043        MOV	AX,4300 
+1F33:0E77 CD2F          INT	2F      
+1F33:0E79 3C80          CMP	AL,80   
+1F33:0E7B F9            STC	        
+1F33:0E7C 7517          JNZ	0E95    
+1F33:0E7E B81043        MOV	AX,4310 
+1F33:0E81 CD2F          INT	2F      
+1F33:0E83 8BC1          MOV	AX,CX   
+1F33:0E85 36            SS:	        
+1F33:0E86 8C063008      MOV	[0830],ES                          
+1F33:0E8A 36            SS:	        
+1F33:0E8B 891E2E08      MOV	[082E],BX                          
+1F33:0E8F 36            SS:	        
+1F33:0E90 FF1E2E08      CALL	FAR [082E]                         
+1F33:0E94 F8            CLC	        
+1F33:0E95 07            POP	ES      
+1F33:0E96 59            POP	CX      
+1F33:0E97 C3            RET	        
+;PROCEDIMIENTO
+1F33:0E98 06            PUSH	ES      
+1F33:0E99 1E            PUSH	DS      
+1F33:0E9A FC            CLD	        
+1F33:0E9B 36            SS:	        
+1F33:0E9C 8B362A08      MOV	SI,[082A]                          
+1F33:0EA0 36            SS:	        
+1F33:0EA1 8E1E2C08      MOV	DS,[082C]                          
+1F33:0EA5 36            SS:	        
+1F33:0EA6 8E062C08      MOV	ES,[082C]                          
+1F33:0EAA AC            LODSB	        
+1F33:0EAB 0AC0          OR	AL,AL   
+1F33:0EAD 75FB          JNZ	0EAA    
+1F33:0EAF FD            STD	        
+1F33:0EB0 4E            DEC	SI      
+1F33:0EB1 AC            LODSB	        
+1F33:0EB2 3C5C          CMP	AL,5C   
+1F33:0EB4 75FB          JNZ	0EB1    
+1F33:0EB6 8BFE          MOV	DI,SI   
+1F33:0EB8 83C706        ADD	DI,+06  
+1F33:0EBB 33C0          XOR	AX,AX   
+1F33:0EBD AA            STOSB	        
+1F33:0EBE AA            STOSB	        
+1F33:0EBF AC            LODSB	        
+1F33:0EC0 0AC0          OR	AL,AL   
+1F33:0EC2 7403          JZ	0EC7    
+1F33:0EC4 AA            STOSB	        
+1F33:0EC5 EBF8          JMP	0EBF    
+1F33:0EC7 8D36E502      LEA	SI,[02E5]                          
+1F33:0ECB 0E            PUSH	CS      
+1F33:0ECC 1F            POP	DS      
+1F33:0ECD 36            SS:	        
+1F33:0ECE 8B3E2A08      MOV	DI,[082A]                          
+1F33:0ED2 83EF03        SUB	DI,+03  
+1F33:0ED5 FC            CLD	        
+1F33:0ED6 B90700        MOV	CX,0007 
+1F33:0ED9 F3            REPZ	        
+1F33:0EDA A4            MOVSB	        
+1F33:0EDB 1F            POP	DS      
+1F33:0EDC 07            POP	ES      
+1F33:0EDD C3            RET	        
+;PROCEDIMIENTO
+1F33:0EDE 9C            PUSHF	        
+1F33:0EDF 33C0          XOR	AX,AX   
+1F33:0EE1 50            PUSH	AX      
+1F33:0EE2 9D            POPF	        
+1F33:0EE3 9C            PUSHF	        
+1F33:0EE4 58            POP	AX      
+1F33:0EE5 A90080        TEST	AX,8000 
+1F33:0EE8 B80000        MOV	AX,0000 
+1F33:0EEB 7513          JNZ	0F00    
+1F33:0EED B80070        MOV	AX,7000 
+1F33:0EF0 50            PUSH	AX      
+1F33:0EF1 9D            POPF	        
+1F33:0EF2 FB            STI	        
+1F33:0EF3 9C            PUSHF	        
+1F33:0EF4 58            POP	AX      
+1F33:0EF5 A90070        TEST	AX,7000 
+1F33:0EF8 B88602        MOV	AX,0286 
+1F33:0EFB 7403          JZ	0F00    
+1F33:0EFD B88603        MOV	AX,0386 
+1F33:0F00 9D            POPF	        
+1F33:0F01 C3            RET	        
+
+1F33:0F02 BF0700        MOV	DI,0007 
+;PROCEDIMIENTO
+1F33:0F05 BF0400        MOV	DI,0004 
+1F33:0F08 1E            PUSH	DS      
+1F33:0F09 06            PUSH	ES      
+1F33:0F0A 8CCE          MOV	SI,CS   
+1F33:0F0C B8400F        MOV	AX,0F40 
+1F33:0F0F B104          MOV	CL,04   
+1F33:0F11 D3E8          SHR	AX,CL   
+1F33:0F13 03F0          ADD	SI,AX   
+1F33:0F15 8EDE          MOV	DS,SI   
+1F33:0F17 33C0          XOR	AX,AX   
+1F33:0F19 33F6          XOR	SI,SI   
+1F33:0F1B 813C4C4F      CMP	WORD PTR [SI],4F4C                 
+1F33:0F1F 750F          JNZ	0F30    
+1F33:0F21 817C02474F    CMP	WORD PTR [SI+02],4F47              
+1F33:0F26 7508          JNZ	0F30    
+1F33:0F28 B8300F        MOV	AX,0F30 
+1F33:0F2B 0E            PUSH	CS      
+1F33:0F2C 50            PUSH	AX      
+1F33:0F2D 1E            PUSH	DS      
+1F33:0F2E 57            PUSH	DI      
+1F33:0F2F CB            RETF	        
+1F33:0F30 07            POP	ES      
+1F33:0F31 1F            POP	DS      
+1F33:0F32 C3            RET	        
+1F33:0F33 87DB          XCHG	BX,BX   
+1F33:0F35 87DB          XCHG	BX,BX   
+1F33:0F37 87DB          XCHG	BX,BX   
+1F33:0F39 87DB          XCHG	BX,BX   
+1F33:0F3B 87DB          XCHG	BX,BX   
+1F33:0F3D 87DB          XCHG	BX,BX   
+1F33:0F3F 90            NOP	        
+1F33:0F40 4C            DEC	SP      
+1F33:0F41 4F            DEC	DI      
+1F33:0F42 47            INC	DI      
+1F33:0F43 4F            DEC	DI      
+1F33:0F44 EB67          JMP	0FAD    
+1F33:0F46 90            NOP	        
+1F33:0F47 0E            PUSH	CS      
+1F33:0F48 1F            POP	DS      
+1F33:0F49 A05A00        MOV	AL,[005A]                          
+1F33:0F4C 3C07          CMP	AL,07   
+1F33:0F4E 740A          JZ	0F5A    
+1F33:0F50 3C03          CMP	AL,03   
+1F33:0F52 7606          JBE	0F5A    
+1F33:0F54 32E4          XOR	AH,AH   
+1F33:0F56 CD10          INT	10      
+1F33:0F58 EB3F          JMP	0F99    
+1F33:0F5A A05B00        MOV	AL,[005B]                          
+1F33:0F5D 3C32          CMP	AL,32   
+1F33:0F5F 730B          JNB	0F6C    
+1F33:0F61 3C2B          CMP	AL,2B   
+1F33:0F63 7207          JB	0F6C    
+1F33:0F65 B80112        MOV	AX,1201 
+1F33:0F68 B330          MOV	BL,30   
+1F33:0F6A CD10          INT	10      
+1F33:0F6C A05A00        MOV	AL,[005A]                          
+1F33:0F6F 3C02          CMP	AL,02   
+1F33:0F71 7502          JNZ	0F75    
+1F33:0F73 B003          MOV	AL,03   
+1F33:0F75 32E4          XOR	AH,AH   
+1F33:0F77 CD10          INT	10      
+1F33:0F79 A05B00        MOV	AL,[005B]                          
+1F33:0F7C 3C19          CMP	AL,19   
+1F33:0F7E 7607          JBE	0F87    
+1F33:0F80 B81211        MOV	AX,1112 
+1F33:0F83 32DB          XOR	BL,BL   
+1F33:0F85 CD10          INT	10      
+1F33:0F87 B90706        MOV	CX,0607 
+1F33:0F8A 803E5B0019    CMP	BYTE PTR [005B],19                 
+1F33:0F8F 7403          JZ	0F94    
+1F33:0F91 B90704        MOV	CX,0407 
+1F33:0F94 B80001        MOV	AX,0100 
+1F33:0F97 CD10          INT	10      
+1F33:0F99 CB            RETF	        
+1F33:0F9A 0000          ADD	[BX+SI],AL                         
+1F33:0F9C 000C          ADD	[SI],CL 
+1F33:0F9E 0A0E3115      OR	CL,[1531]                          
+1F33:0FA2 2307          AND	AX,[BX] 
+1F33:0FA4 0F            POP	CS      
+1F33:0FA5 2412          AND	AL,12   
+1F33:0FA7 36            SS:	        
+1F33:0FA8 092D          OR	[DI],BP 
+1F33:0FAA 1B3F          SBB	DI,[BX] 
+1F33:0FAC 008CD890      ADD	[SI+90D8],CL                       
+1F33:0FB0 45            INC	BP      
+1F33:0FB1 55            PUSH	BP      
+1F33:0FB2 8BEC          MOV	BP,SP   
+1F33:0FB4 1E            PUSH	DS      
+1F33:0FB5 8ED8          MOV	DS,AX   
+1F33:0FB7 83EC40        SUB	SP,+40  
+1F33:0FBA 56            PUSH	SI      
+1F33:0FBB 57            PUSH	DI      
+1F33:0FBC 06            PUSH	ES      
+1F33:0FBD 33C0          XOR	AX,AX   
+1F33:0FBF 8946FC        MOV	[BP-04],AX                         
+1F33:0FC2 8946FA        MOV	[BP-06],AX                         
+1F33:0FC5 8946F4        MOV	[BP-0C],AX                         
+1F33:0FC8 B88002        MOV	AX,0280 
+1F33:0FCB 8946F8        MOV	[BP-08],AX                         
+1F33:0FCE B8E001        MOV	AX,01E0 
+1F33:0FD1 8946F6        MOV	[BP-0A],AX                         
+1F33:0FD4 32DB          XOR	BL,BL   
+1F33:0FD6 80CB02        OR	BL,02   
+1F33:0FD9 B004          MOV	AL,04   
+1F33:0FDB 8846E9        MOV	[BP-17],AL                         
+1F33:0FDE 32E4          XOR	AH,AH   
+1F33:0FE0 C746E45000    MOV	WORD PTR [BP-1C],0050              
+1F33:0FE5 C746E25000    MOV	WORD PTR [BP-1E],0050              
+1F33:0FEA FEC8          DEC	AL      
+1F33:0FEC 3C01          CMP	AL,01   
+1F33:0FEE 1AC0          SBB	AL,AL   
+1F33:0FF0 2401          AND	AL,01   
+1F33:0FF2 0AD8          OR	BL,AL   
+1F33:0FF4 B800A0        MOV	AX,A000 
+1F33:0FF7 8946F0        MOV	[BP-10],AX                         
+1F33:0FFA C746EE0000    MOV	WORD PTR [BP-12],0000              
+1F33:0FFF 885EE8        MOV	[BP-18],BL                         
+1F33:1002 33C0          XOR	AX,AX   
+1F33:1004 D0EB          SHR	BL,1    
+1F33:1006 1AFF          SBB	BH,BH   
+1F33:1008 F5            CMC	        
+1F33:1009 1ADB          SBB	BL,BL   
+1F33:100B 16            PUSH	SS      
+1F33:100C 07            POP	ES      
+1F33:100D 8D7ECC        LEA	DI,[BP-34]                         
+1F33:1010 B91000        MOV	CX,0010 
+1F33:1013 50            PUSH	AX      
+1F33:1014 22C3          AND	AL,BL   
+1F33:1016 22E7          AND	AH,BH   
+1F33:1018 0AC4          OR	AL,AH   
+1F33:101A AA            STOSB	        
+1F33:101B 58            POP	AX      
+1F33:101C FEC0          INC	AL      
+1F33:101E 80F4FF        XOR	AH,FF   
+1F33:1021 E2F0          LOOP	1013    
+1F33:1023 0E            PUSH	CS      
+1F33:1024 1F            POP	DS      
+1F33:1025 B40F          MOV	AH,0F   
+1F33:1027 CD10          INT	10      
+1F33:1029 A25A00        MOV	[005A],AL                          
+1F33:102C B84000        MOV	AX,0040 
+1F33:102F 8EC0          MOV	ES,AX   
+1F33:1031 BB8400        MOV	BX,0084 
+1F33:1034 26            ES:	        
+1F33:1035 8A07          MOV	AL,[BX] 
+1F33:1037 FEC0          INC	AL      
+1F33:1039 A25B00        MOV	[005B],AL                          
+1F33:103C BB6300        MOV	BX,0063 
+1F33:103F 26            ES:	        
+1F33:1040 8B07          MOV	AX,[BX] 
+1F33:1042 050600        ADD	AX,0006 
+1F33:1045 8946E6        MOV	[BP-1A],AX                         
+1F33:1048 B81200        MOV	AX,0012 
+1F33:104B CD10          INT	10      
+1F33:104D 0E            PUSH	CS      
+1F33:104E 07            POP	ES      
+1F33:104F BA5C00        MOV	DX,005C 
+1F33:1052 B80210        MOV	AX,1002 
+1F33:1055 CD10          INT	10      
+1F33:1057 B92322        MOV	CX,2223 
+1F33:105A BA0021        MOV	DX,2100 
+1F33:105D BB0700        MOV	BX,0007 
+1F33:1060 B81010        MOV	AX,1010 
+1F33:1063 CD10          INT	10      
+1F33:1065 B93231        MOV	CX,3132 
+1F33:1068 BA0030        MOV	DX,3000 
+1F33:106B BB0F00        MOV	BX,000F 
+1F33:106E B81010        MOV	AX,1010 
+1F33:1071 CD10          INT	10      
+1F33:1073 8B56E6        MOV	DX,[BP-1A]                         
+1F33:1076 EC            IN	AL,DX   
+1F33:1077 BAC003        MOV	DX,03C0 
+1F33:107A 32C0          XOR	AL,AL   
+1F33:107C EE            OUT	DX,AL   
+1F33:107D 8B46FC        MOV	AX,[BP-04]                         
+1F33:1080 8946EC        MOV	[BP-14],AX                         
+1F33:1083 8B46FA        MOV	AX,[BP-06]                         
+1F33:1086 0346F6        ADD	AX,[BP-0A]                         
+1F33:1089 48            DEC	AX      
+1F33:108A 2B46F4        SUB	AX,[BP-0C]                         
+1F33:108D 8946EA        MOV	[BP-16],AX                         
+1F33:1090 8B46F2        MOV	AX,[BP-0E]                         
+1F33:1093 8946F6        MOV	[BP-0A],AX                         
+1F33:1096 B8F203        MOV	AX,03F2 
+1F33:1099 8946C2        MOV	[BP-3E],AX                         
+1F33:109C B8DA03        MOV	AX,03DA 
+1F33:109F 8946BE        MOV	[BP-42],AX                         
+1F33:10A2 B88D03        MOV	AX,038D 
+1F33:10A5 8946C4        MOV	[BP-3C],AX                         
+1F33:10A8 B8A503        MOV	AX,03A5 
+1F33:10AB 8946C0        MOV	[BP-40],AX                         
+1F33:10AE B82A03        MOV	AX,032A 
+1F33:10B1 8946CA        MOV	[BP-36],AX                         
+1F33:10B4 B83503        MOV	AX,0335 
+1F33:10B7 8946C8        MOV	[BP-38],AX                         
+1F33:10BA C47EEE        LES	DI,[BP-12]                         
+1F33:10BD 8A5EE8        MOV	BL,[BP-18]                         
+1F33:10C0 80E301        AND	BL,01   
+1F33:10C3 E87802        CALL	133E    
+1F33:10C6 0E            PUSH	CS      
+1F33:10C7 1F            POP	DS      
+1F33:10C8 BE6004        MOV	SI,0460 
+1F33:10CB 03740A        ADD	SI,[SI+0A]                         
+1F33:10CE C746DE0000    MOV	WORD PTR [BP-22],0000              
+1F33:10D3 32E4          XOR	AH,AH   
+1F33:10D5 E89D00        CALL	1175    
+1F33:10D8 0AC0          OR	AL,AL   
+1F33:10DA 7537          JNZ	1113    
+1F33:10DC E89600        CALL	1175    
+1F33:10DF 3C03          CMP	AL,03   
+1F33:10E1 730A          JNB	10ED    
+1F33:10E3 3C02          CMP	AL,02   
+1F33:10E5 744A          JZ	1131    
+1F33:10E7 0AC0          OR	AL,AL   
+1F33:10E9 7458          JZ	1143    
+1F33:10EB EB61          JMP	114E    
+1F33:10ED 50            PUSH	AX      
+1F33:10EE E89500        CALL	1186    
+1F33:10F1 FF56C4        CALL	[BP-3C] 
+1F33:10F4 E308          JCXZ	10FE    
+1F33:10F6 53            PUSH	BX      
+1F33:10F7 E89600        CALL	1190    
+1F33:10FA 58            POP	AX      
+1F33:10FB FF56C4        CALL	[BP-3C] 
+1F33:10FE 8B46DE        MOV	AX,[BP-22]                         
+1F33:1101 FF56C4        CALL	[BP-3C] 
+1F33:1104 58            POP	AX      
+1F33:1105 0146EC        ADD	[BP-14],AX                         
+1F33:1108 F7C60100      TEST	SI,0001 
+1F33:110C 7403          JZ	1111    
+1F33:110E E86400        CALL	1175    
+1F33:1111 EBBB          JMP	10CE    
+1F33:1113 50            PUSH	AX      
+1F33:1114 56            PUSH	SI      
+1F33:1115 E86E00        CALL	1186    
+1F33:1118 E30D          JCXZ	1127    
+1F33:111A FF56BE        CALL	[BP-42] 
+1F33:111D 7305          JNB	1124    
+1F33:111F E8CF00        CALL	11F1    
+1F33:1122 EB03          JMP	1127    
+1F33:1124 E88B00        CALL	11B2    
+1F33:1127 5E            POP	SI      
+1F33:1128 E84A00        CALL	1175    
+1F33:112B 58            POP	AX      
+1F33:112C 0146EC        ADD	[BP-14],AX                         
+1F33:112F EB9D          JMP	10CE    
+1F33:1131 E84100        CALL	1175    
+1F33:1134 32E4          XOR	AH,AH   
+1F33:1136 8BD8          MOV	BX,AX   
+1F33:1138 E83A00        CALL	1175    
+1F33:113B 015EEC        ADD	[BP-14],BX                         
+1F33:113E 0146EA        ADD	[BP-16],AX                         
+1F33:1141 EB8B          JMP	10CE    
+1F33:1143 8B46FC        MOV	AX,[BP-04]                         
+1F33:1146 8946EC        MOV	[BP-14],AX                         
+1F33:1149 FF4EEA        DEC	WORD PTR [BP-16]                   
+1F33:114C EB80          JMP	10CE    
+1F33:114E F646E802      TEST	BYTE PTR [BP-18],02                
+1F33:1152 7409          JZ	115D    
+1F33:1154 8A5EE8        MOV	BL,[BP-18]                         
+1F33:1157 80E301        AND	BL,01   
+1F33:115A E80F02        CALL	136C    
+1F33:115D 8B56E6        MOV	DX,[BP-1A]                         
+1F33:1160 EC            IN	AL,DX   
+1F33:1161 BAC003        MOV	DX,03C0 
+1F33:1164 B020          MOV	AL,20   
+1F33:1166 EE            OUT	DX,AL   
+1F33:1167 8D065C00      LEA	AX,[005C]                          
+1F33:116B 07            POP	ES      
+1F33:116C 5F            POP	DI      
+1F33:116D 5E            POP	SI      
+1F33:116E 8D66FE        LEA	SP,[BP-02]                         
+1F33:1171 1F            POP	DS      
+1F33:1172 5D            POP	BP      
+1F33:1173 4D            DEC	BP      
+1F33:1174 CB            RETF	        
+;PROCEDIMIENTO
+1F33:1175 AC            LODSB	        
+1F33:1176 0BF6          OR	SI,SI   
+1F33:1178 7401          JZ	117B    
+1F33:117A C3            RET	        
+1F33:117B 8CDE          MOV	SI,DS   
+1F33:117D 81C60010      ADD	SI,1000 
+1F33:1181 8EDE          MOV	DS,SI   
+1F33:1183 2BF6          SUB	SI,SI   
+1F33:1185 C3            RET	        
+;PROCEDIMIENTO
+1F33:1186 8BC8          MOV	CX,AX   
+1F33:1188 8B7EEC        MOV	DI,[BP-14]                         
+1F33:118B 33C0          XOR	AX,AX   
+1F33:118D 33DB          XOR	BX,BX   
+1F33:118F C3            RET	        
+;PROCEDIMIENTO
+1F33:1190 E8E800        CALL	127B    
+1F33:1193 8D5ECC        LEA	BX,[BP-34]                         
+1F33:1196 BACF03        MOV	DX,03CF 
+1F33:1199 F646E802      TEST	BYTE PTR [BP-18],02                
+1F33:119D 7503          JNZ	11A2    
+1F33:119F 8B56E4        MOV	DX,[BP-1C]                         
+1F33:11A2 FF56C0        CALL	[BP-40] 
+1F33:11A5 36            SS:	        
+1F33:11A6 D7            XLAT	        
+1F33:11A7 FF56CA        CALL	[BP-36] 
+1F33:11AA D0CC          ROR	AH,1    
+1F33:11AC 83D700        ADC	DI,+00  
+1F33:11AF E2F1          LOOP	11A2    
+1F33:11B1 C3            RET	        
+;PROCEDIMIENTO
+1F33:11B2 E8D200        CALL	1287    
+1F33:11B5 8BD3          MOV	DX,BX   
+1F33:11B7 8D5ECC        LEA	BX,[BP-34]                         
+1F33:11BA FF56C2        CALL	[BP-3E] 
+1F33:11BD 36            SS:	        
+1F33:11BE D7            XLAT	        
+1F33:11BF 8BDA          MOV	BX,DX   
+1F33:11C1 BACF03        MOV	DX,03CF 
+1F33:11C4 F646E802      TEST	BYTE PTR [BP-18],02                
+1F33:11C8 7503          JNZ	11CD    
+1F33:11CA 8B56E4        MOV	DX,[BP-1C]                         
+1F33:11CD 8AE3          MOV	AH,BL   
+1F33:11CF E31A          JCXZ	11EB    
+1F33:11D1 FF56CA        CALL	[BP-36] 
+1F33:11D4 47            INC	DI      
+1F33:11D5 49            DEC	CX      
+1F33:11D6 B4FF          MOV	AH,FF   
+1F33:11D8 E311          JCXZ	11EB    
+1F33:11DA F646E802      TEST	BYTE PTR [BP-18],02                
+1F33:11DE 7405          JZ	11E5    
+1F33:11E0 86E0          XCHG	AH,AL   
+1F33:11E2 EE            OUT	DX,AL   
+1F33:11E3 86E0          XCHG	AH,AL   
+1F33:11E5 FF56C8        CALL	[BP-38] 
+1F33:11E8 47            INC	DI      
+1F33:11E9 E2FA          LOOP	11E5    
+1F33:11EB 22E7          AND	AH,BH   
+1F33:11ED FF56CA        CALL	[BP-36] 
+1F33:11F0 C3            RET	        
+;PROCEDIMIENTO
+1F33:11F1 57            PUSH	DI      
+1F33:11F2 51            PUSH	CX      
+1F33:11F3 56            PUSH	SI      
+1F33:11F4 E8BBFF        CALL	11B2    
+1F33:11F7 5E            POP	SI      
+1F33:11F8 59            POP	CX      
+1F33:11F9 5F            POP	DI      
+1F33:11FA 8B46C8        MOV	AX,[BP-38]                         
+1F33:11FD 50            PUSH	AX      
+1F33:11FE 8B46CA        MOV	AX,[BP-36]                         
+1F33:1201 8946C8        MOV	[BP-38],AX                         
+1F33:1204 E88000        CALL	1287    
+1F33:1207 53            PUSH	BX      
+1F33:1208 51            PUSH	CX      
+1F33:1209 8B4EEC        MOV	CX,[BP-14]                         
+1F33:120C 80E107        AND	CL,07   
+1F33:120F B380          MOV	BL,80   
+1F33:1211 D2EB          SHR	BL,CL   
+1F33:1213 B1AA          MOV	CL,AA   
+1F33:1215 B5AA          MOV	CH,AA   
+1F33:1217 22CB          AND	CL,BL   
+1F33:1219 7402          JZ	121D    
+1F33:121B B555          MOV	CH,55   
+1F33:121D 8AC5          MOV	AL,CH   
+1F33:121F 8AE5          MOV	AH,CH   
+1F33:1221 59            POP	CX      
+1F33:1222 5B            POP	BX      
+1F33:1223 23D8          AND	BX,AX   
+1F33:1225 8846DD        MOV	[BP-23],AL                         
+1F33:1228 8BD3          MOV	DX,BX   
+1F33:122A 8D5ECC        LEA	BX,[BP-34]                         
+1F33:122D 8A04          MOV	AL,[SI] 
+1F33:122F 240F          AND	AL,0F   
+1F33:1231 36            SS:	        
+1F33:1232 D7            XLAT	        
+1F33:1233 8BDA          MOV	BX,DX   
+1F33:1235 BACF03        MOV	DX,03CF 
+1F33:1238 F646E802      TEST	BYTE PTR [BP-18],02                
+1F33:123C 7503          JNZ	1241    
+1F33:123E 8B56E4        MOV	DX,[BP-1C]                         
+1F33:1241 8AE3          MOV	AH,BL   
+1F33:1243 E31B          JCXZ	1260    
+1F33:1245 FF56CA        CALL	[BP-36] 
+1F33:1248 47            INC	DI      
+1F33:1249 49            DEC	CX      
+1F33:124A 8A66DD        MOV	AH,[BP-23]                         
+1F33:124D E311          JCXZ	1260    
+1F33:124F F646E802      TEST	BYTE PTR [BP-18],02                
+1F33:1253 7405          JZ	125A    
+1F33:1255 86E0          XCHG	AH,AL   
+1F33:1257 EE            OUT	DX,AL   
+1F33:1258 86E0          XCHG	AH,AL   
+1F33:125A FF56C8        CALL	[BP-38] 
+1F33:125D 47            INC	DI      
+1F33:125E E2FA          LOOP	125A    
+1F33:1260 22E7          AND	AH,BH   
+1F33:1262 FF56CA        CALL	[BP-36] 
+1F33:1265 58            POP	AX      
+1F33:1266 8946C8        MOV	[BP-38],AX                         
+1F33:1269 C3            RET	        
+1F33:126A 50            PUSH	AX      
+1F33:126B 86E0          XCHG	AH,AL   
+1F33:126D EE            OUT	DX,AL   
+1F33:126E 26            ES:	        
+1F33:126F 8625          XCHG	AH,[DI] 
+1F33:1271 B0FF          MOV	AL,FF   
+1F33:1273 58            POP	AX      
+1F33:1274 C3            RET	        
+1F33:1275 50            PUSH	AX      
+1F33:1276 26            ES:	        
+1F33:1277 8605          XCHG	AL,[DI] 
+1F33:1279 58            POP	AX      
+1F33:127A C3            RET	        
+;PROCEDIMIENTO
+1F33:127B E83600        CALL	12B4    
+1F33:127E 51            PUSH	CX      
+1F33:127F 8ACA          MOV	CL,DL   
+1F33:1281 B480          MOV	AH,80   
+1F33:1283 D2EC          SHR	AH,CL   
+1F33:1285 59            POP	CX      
+1F33:1286 C3            RET	        
+;PROCEDIMIENTO
+1F33:1287 E82A00        CALL	12B4    
+1F33:128A 8BC1          MOV	AX,CX   
+1F33:128C 8ACA          MOV	CL,DL   
+1F33:128E B380          MOV	BL,80   
+1F33:1290 D2EB          SHR	BL,CL   
+1F33:1292 8BC8          MOV	CX,AX   
+1F33:1294 49            DEC	CX      
+1F33:1295 8BC1          MOV	AX,CX   
+1F33:1297 D1E8          SHR	AX,1    
+1F33:1299 D1E8          SHR	AX,1    
+1F33:129B D1E8          SHR	AX,1    
+1F33:129D 83E107        AND	CX,+07  
+1F33:12A0 8AFB          MOV	BH,BL   
+1F33:12A2 D2CB          ROR	BL,CL   
+1F33:12A4 8BC8          MOV	CX,AX   
+1F33:12A6 3AFB          CMP	BH,BL   
+1F33:12A8 83D100        ADC	CX,+00  
+1F33:12AB F6DB          NEG	BL      
+1F33:12AD 02FF          ADD	BH,BH   
+1F33:12AF FECF          DEC	BH      
+1F33:12B1 86FB          XCHG	BH,BL   
+1F33:12B3 C3            RET	        
+;PROCEDIMIENTO
+1F33:12B4 8B46EA        MOV	AX,[BP-16]                         
+1F33:12B7 8B5EEE        MOV	BX,[BP-12]                         
+1F33:12BA F766E2        MUL	WORD PTR [BP-1E]                   
+1F33:12BD 03C3          ADD	AX,BX   
+1F33:12BF 8BD7          MOV	DX,DI   
+1F33:12C1 D1EF          SHR	DI,1    
+1F33:12C3 D1EF          SHR	DI,1    
+1F33:12C5 D1EF          SHR	DI,1    
+1F33:12C7 03F8          ADD	DI,AX   
+1F33:12C9 80E207        AND	DL,07   
+1F33:12CC C3            RET	        
+1F33:12CD 0346DE        ADD	AX,[BP-22]                         
+1F33:12D0 8946DE        MOV	[BP-22],AX                         
+1F33:12D3 8366DE01      AND	WORD PTR [BP-22],+01               
+1F33:12D7 D1E8          SHR	AX,1    
+1F33:12D9 03F0          ADD	SI,AX   
+1F33:12DB 7307          JNB	12E4    
+1F33:12DD 8CD8          MOV	AX,DS   
+1F33:12DF 050010        ADD	AX,1000 
+1F33:12E2 8ED8          MOV	DS,AX   
+1F33:12E4 C3            RET	        
+1F33:12E5 8376DE01      XOR	WORD PTR [BP-22],+01               
+1F33:12E9 F746DE0100    TEST	WORD PTR [BP-22],0001              
+1F33:12EE 7506          JNZ	12F6    
+1F33:12F0 E882FE        CALL	1175    
+1F33:12F3 240F          AND	AL,0F   
+1F33:12F5 C3            RET	        
+1F33:12F6 8A04          MOV	AL,[SI] 
+1F33:12F8 D0E8          SHR	AL,1    
+1F33:12FA D0E8          SHR	AL,1    
+1F33:12FC D0E8          SHR	AL,1    
+1F33:12FE D0E8          SHR	AL,1    
+1F33:1300 C3            RET	        
+1F33:1301 8376DE01      XOR	WORD PTR [BP-22],+01               
+1F33:1305 8A04          MOV	AL,[SI] 
+1F33:1307 F746DE0100    TEST	WORD PTR [BP-22],0001              
+1F33:130C 7503          JNZ	1311    
+1F33:130E 240F          AND	AL,0F   
+1F33:1310 C3            RET	        
+1F33:1311 D0E8          SHR	AL,1    
+1F33:1313 D0E8          SHR	AL,1    
+1F33:1315 D0E8          SHR	AL,1    
+1F33:1317 D0E8          SHR	AL,1    
+1F33:1319 C3            RET	        
+1F33:131A 50            PUSH	AX      
+1F33:131B 8A04          MOV	AL,[SI] 
+1F33:131D 8AE0          MOV	AH,AL   
+1F33:131F 240F          AND	AL,0F   
+1F33:1321 D0EC          SHR	AH,1    
+1F33:1323 D0EC          SHR	AH,1    
+1F33:1325 D0EC          SHR	AH,1    
+1F33:1327 D0EC          SHR	AH,1    
+1F33:1329 3AC4          CMP	AL,AH   
+1F33:132B 58            POP	AX      
+1F33:132C 7402          JZ	1330    
+1F33:132E F9            STC	        
+1F33:132F C3            RET	        
+1F33:1330 F8            CLC	        
+1F33:1331 C3            RET	        
+1F33:1332 E840FE        CALL	1175    
+1F33:1335 D0E8          SHR	AL,1    
+1F33:1337 D0E8          SHR	AL,1    
+1F33:1339 D0E8          SHR	AL,1    
+1F33:133B D0E8          SHR	AL,1    
+1F33:133D C3            RET	        
+;PROCEDIMIENTO
+1F33:133E BACE03        MOV	DX,03CE 
+1F33:1341 0ADB          OR	BL,BL   
+1F33:1343 750E          JNZ	1353    
+1F33:1345 B005          MOV	AL,05   
+1F33:1347 B402          MOV	AH,02   
+1F33:1349 EF            OUT	DX,AX   
+1F33:134A EB00          JMP	134C    
+1F33:134C B003          MOV	AL,03   
+1F33:134E B400          MOV	AH,00   
+1F33:1350 EF            OUT	DX,AX   
+1F33:1351 EB00          JMP	1353    
+1F33:1353 B40F          MOV	AH,0F   
+1F33:1355 0ADB          OR	BL,BL   
+1F33:1357 7402          JZ	135B    
+1F33:1359 B401          MOV	AH,01   
+1F33:135B BAC403        MOV	DX,03C4 
+1F33:135E B002          MOV	AL,02   
+1F33:1360 EF            OUT	DX,AX   
+1F33:1361 EB00          JMP	1363    
+1F33:1363 BACE03        MOV	DX,03CE 
+1F33:1366 B008          MOV	AL,08   
+1F33:1368 EE            OUT	DX,AL   
+1F33:1369 EB00          JMP	136B    
+1F33:136B C3            RET	        
+;PROCEDIMIENTO
+1F33:136C BACE03        MOV	DX,03CE 
+1F33:136F B001          MOV	AL,01   
+1F33:1371 32E4          XOR	AH,AH   
+1F33:1373 EF            OUT	DX,AX   
+1F33:1374 B008          MOV	AL,08   
+1F33:1376 B4FF          MOV	AH,FF   
+1F33:1378 EF            OUT	DX,AX   
+1F33:1379 B003          MOV	AL,03   
+1F33:137B B400          MOV	AH,00   
+1F33:137D EF            OUT	DX,AX   
+1F33:137E B40F          MOV	AH,0F   
+1F33:1380 0ADB          OR	BL,BL   
+1F33:1382 7402          JZ	1386    
+1F33:1384 B401          MOV	AH,01   
+1F33:1386 B2C4          MOV	DL,C4   
+1F33:1388 B002          MOV	AL,02   
+1F33:138A EF            OUT	DX,AX   
+1F33:138B 0ADB          OR	BL,BL   
+1F33:138D 7507          JNZ	1396    
+1F33:138F B2CE          MOV	DL,CE   
+1F33:1391 B005          MOV	AL,05   
+1F33:1393 B400          MOV	AH,00   
+1F33:1395 EF            OUT	DX,AX   
+1F33:1396 B008          MOV	AL,08   
+1F33:1398 EE            OUT	DX,AL   
+1F33:1399 C3            RET	        
