@@ -1,0 +1,4 @@
+program nulo;
+begin
+end.
+
